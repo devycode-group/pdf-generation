@@ -80,7 +80,7 @@ export class PDFService {
 		const page = await browser.newPage();
 
 		try {
-			// await page.setViewport({ width: 1920, height: 1080 });
+			await page.setViewport({ width: 1920, height: 1080 });
 			
 			await page.goto(url, { 
 				waitUntil: ['domcontentloaded'],
@@ -114,7 +114,7 @@ export class PDFService {
 		const browser = await this.getBrowser();
 		const page = await browser.newPage();
 
-		await page.goto("https://www.google.com", { waitUntil: ['domcontentloaded'], timeout: 30000 });
+		await page.goto("https://api.wtb-dev.devycode.com/invoices/orders/pdf/INV-ORD-000010", { waitUntil: ['domcontentloaded'], timeout: 30000 });
 
 		const pdfBuffer = await page.pdf({
 			format: 'A4',

@@ -19,6 +19,9 @@ interface RequestBody {
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+		// Initialize PDF service
+		const pdfService = new PDFService(env);
+
 		try {
 			// Check API key
 			const apiKey = request.headers.get('X-API-Key');
@@ -49,6 +52,26 @@ export default {
 				);
 			}
 
+			// if (request.method === 'GET') {
+			// 	try {
+			// 		const pdfBuffer = await pdfService.generateBasicPDF();
+			// 		return new Response(pdfBuffer, {
+			// 			headers: {
+			// 				'Content-Type': 'application/pdf',
+			// 			},
+			// 		});
+			// 	} catch (error) {
+			// 		console.error('Error generating basic PDF:', error);
+			// 		return new Response(
+			// 			JSON.stringify({
+			// 				error: 'Failed to generate basic PDF',
+			// 				code: 'PDF_GENERATION_ERROR',
+			// 			})
+			// 		);
+			// 	} finally {
+			// 		await pdfService.cleanup();
+			// 	}
+			// }
 			// Parse request body
 			let body: RequestBody;
 			try {
@@ -81,10 +104,6 @@ export default {
 					}
 				);
 			}
-
-			// Initialize PDF service
-			const pdfService = new PDFService(env);
-
 			try {
 				// Generate PDF
 				const pdfBuffer = await pdfService.generatePDF(url);
