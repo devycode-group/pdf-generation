@@ -80,21 +80,13 @@ export class PDFService {
 		const page = await browser.newPage();
 
 		try {
-			await page.setViewport({ width: 1920, height: 1080 });
-			
-			page.on('console', msg => console.log('Browser console:', msg.text()));
+			// await page.setViewport({ width: 1920, height: 1080 });
 			
 			await page.goto(url, { 
 				waitUntil: ['domcontentloaded'],
 				timeout: 30000
 			});
-			await Promise.all([
-				page.evaluateHandle('document.fonts.ready'),
-				page.waitForFunction(() => {
-					const body = document.body;
-					return body && body.children.length > 0 && body.offsetHeight > 0;
-				}, { timeout: 5000 }),
-			]);
+			await page.evaluateHandle('document.fonts.ready');
 			
 			const pdfBuffer = await page.pdf({
 				format: 'A4',
@@ -107,8 +99,6 @@ export class PDFService {
 				},
 			});
 
-			await page.close();
-
 			return pdfBuffer;
 		} catch (error: unknown) {
 			await page.close();
@@ -118,6 +108,26 @@ export class PDFService {
 			}
 			throw new PDFGenerationError(`Failed to generate PDF: ${errorMessage}`, 'PDF_GENERATION_ERROR');
 		}
+	}
+
+	async generateBasicPDF(): Promise<Buffer> {
+		const browser = await this.getBrowser();
+		const page = await browser.newPage();
+
+		await page.goto("https://www.google.com", { waitUntil: ['domcontentloaded'], timeout: 30000 });
+
+		const pdfBuffer = await page.pdf({
+			format: 'A4',
+			printBackground: true,
+			margin: {
+				top: '10mm',
+				right: '10mm',
+				bottom: '10mm',
+				left: '10mm',
+			},
+		});
+
+		return pdfBuffer;
 	}
 
 	public async cleanup(): Promise<void> {
