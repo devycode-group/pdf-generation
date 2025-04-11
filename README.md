@@ -42,6 +42,38 @@ The service requires the following environment variables:
 - `API_KEY`: A secure API key for authentication
 - `BROWSER`: Cloudflare Browser binding (configured in wrangler.jsonc)
 
+### Setting up the API_KEY
+
+1. Generate a secure API key (you can use a UUID or a secure random string)
+2. To set the API_KEY secret in Cloudflare Workers, run:
+   ```bash
+   npx wrangler secret put API_KEY
+   ```
+   When prompted, enter your secret API key.
+
+   **Note**: If you see an error that the binding name 'API_KEY' is already in use, you have two options:
+   - Use a different name for your API key (e.g., `PDF_API_KEY`) and update the code accordingly
+   - Delete the existing secret first using:
+     ```bash
+     npx wrangler secret delete API_KEY
+     ```
+     Then try setting it again.
+
+3. For local development, create a `.dev.vars` file in your project root with:
+   ```
+   API_KEY=your_api_key_here
+   ```
+
+### Setting up the Browser Binding
+
+1. In your Cloudflare dashboard, navigate to Workers & Pages
+2. Select your worker
+3. Go to Settings > Variables
+4. Add a new binding:
+   - Name: `BROWSER`
+   - Type: Browser
+   - Click "Save"
+
 ## Development
 
 To start the development server:
@@ -116,4 +148,4 @@ POST /generate-pdf
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.

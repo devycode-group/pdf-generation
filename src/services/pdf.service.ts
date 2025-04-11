@@ -75,15 +75,26 @@ export class PDFService {
 		}
 	}
 
-	async generatePDF(html: string): Promise<Buffer> {
+	async generatePDF(url: string): Promise<Buffer> {
 		const browser = await this.getBrowser();
 		const page = await browser.newPage();
 
 		try {
 			await page.setViewport({ width: 1920, height: 1080 });
-			await page.setContent(html, { waitUntil: 'networkidle0' });
-
-			await page.evaluateHandle('document.fonts.ready');
+			
+			page.on('console', msg => console.log('Browser console:', msg.text()));
+			
+			await page.goto(url, { 
+				waitUntil: ['domcontentloaded'],
+				timeout: 30000
+			});
+			await Promise.all([
+				page.evaluateHandle('document.fonts.ready'),
+				page.waitForFunction(() => {
+					const body = document.body;
+					return body && body.children.length > 0 && body.offsetHeight > 0;
+				}, { timeout: 5000 }),
+			]);
 			
 			const pdfBuffer = await page.pdf({
 				format: 'A4',
@@ -97,12 +108,10 @@ export class PDFService {
 			});
 
 			await page.close();
-			await browser.close();
 
 			return pdfBuffer;
 		} catch (error: unknown) {
 			await page.close();
-			await browser.close();
 			const errorMessage = error instanceof Error ? error.message : 'Unknown error';
 			if (errorMessage.includes('RPC') || errorMessage.includes('receiver')) {
 				throw new RPCError('Failed to generate PDF: RPC connection error');
