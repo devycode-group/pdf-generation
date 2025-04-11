@@ -9,7 +9,13 @@
 	"compatibility_date": "2025-04-10",
 	"observability": {
 		"enabled": true
-	}
+	},
+	"compatibility_flags": [
+	  "nodejs_compat_v2"
+	],
+	"browser": {
+	  "binding": "BROWSER"
+	},
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
@@ -27,7 +33,9 @@
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 */
-	// "vars": { "MY_VARIABLE": "production_value" },
+	"vars": {
+		"API_KEY": "b2aa1d8d3b9ade7ac655ae89c971b7386ca0eb12491754d9f00a4e8cf7090610"
+	},
 	/**
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
