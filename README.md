@@ -102,7 +102,7 @@ POST /generate-pdf
 
 ### Headers
 
-- `X-API-Key`: Your API key for authentication
+- `x-pdf-generation-api-key`: Your API key for authentication
 - `Content-Type`: application/json
 
 ### Request Body

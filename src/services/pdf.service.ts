@@ -83,7 +83,7 @@ export class PDFService {
 			await page.setViewport({ width: 1920, height: 1080 });
 			
 			await page.setExtraHTTPHeaders({
-				'x-api-key': this.env.API_KEY	
+				'x-pdf-generation-api-key': this.env.API_KEY	
 			});
 
 			await page.goto(url, { 

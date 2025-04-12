@@ -24,7 +24,7 @@ export default {
 
 		try {
 			// Check API key
-			const apiKey = request.headers.get('X-API-Key');
+			const apiKey = request.headers.get('x-pdf-generation-api-key');
 			if (!apiKey || apiKey !== env.API_KEY) {
 				return new Response(
 					JSON.stringify({
