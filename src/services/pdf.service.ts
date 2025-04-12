@@ -82,6 +82,10 @@ export class PDFService {
 		try {
 			await page.setViewport({ width: 1920, height: 1080 });
 			
+			await page.setExtraHTTPHeaders({
+				'x-api-key': this.env.API_KEY	
+			});
+
 			await page.goto(url, { 
 				waitUntil: ['domcontentloaded'],
 				timeout: 30000
